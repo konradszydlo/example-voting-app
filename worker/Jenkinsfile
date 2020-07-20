@@ -1,0 +1,44 @@
+pipeline {
+
+  agent {
+    docker {
+      image 'maven:3.6.1-jdk-8-alpine'
+      args '-v $HOME/.m2:/root/.m2'
+    }
+  }
+
+  stages {
+
+    stage("build") {
+
+      steps {
+
+       echo "Compiling worker app"
+       dir("worker"){
+         sh 'mvn compile'
+
+       }
+
+     }
+   }
+   stage("Tests"){
+
+     steps{
+      echo 'Running Unit Tests'
+
+     }
+
+   }
+   stage("package"){
+     steps {
+       echo 'Packaging'
+     }
+   }
+ }
+ post {
+   always{
+     echo 'Pipeline completed'
+   }
+ }
+}
+
